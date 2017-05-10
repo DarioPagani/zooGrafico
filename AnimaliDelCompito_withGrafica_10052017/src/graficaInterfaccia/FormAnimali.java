@@ -7,12 +7,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import zoo.Zoo;
-
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.text.SimpleDateFormat;
 
 import javax.swing.JRadioButton;
@@ -53,18 +50,18 @@ public class FormAnimali extends JFrame
 	private JList list;
 	
 	// Roba seria
-	private Zoo parco;
+	private GestioneAnimali superiore;
 
 	/**
 	 * Create the frame.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public FormAnimali(Zoo parco)
+	public FormAnimali(GestioneAnimali superiore)
 	{
 		super("Inserimento Bestia");
 		
 		//
-		this.parco = parco;
+		this.superiore = superiore;
 		
 		// Costruzione della finestra
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -141,6 +138,8 @@ public class FormAnimali extends JFrame
 		invia = new JButton("Invia");
 		panel_2.add(invia);
 		
+		invia.addActionListener(new Invia());
+		
 		btnCancella = new JButton("cancella");
 		panel_2.add(btnCancella);
 		
@@ -176,7 +175,17 @@ public class FormAnimali extends JFrame
 
 		@Override
 		public void actionPerformed(ActionEvent e)
-		{			
+		{
+			FormAnimali.this.superiore.updateList();
+			try
+			{
+				FormAnimali.this.dispose();
+				FormAnimali.this.superiore.setVisible(true);
+			}
+			catch (Throwable e1)
+			{
+				System.err.println("Sembra sia impossibile chiudere la finestra...");
+			}
 		}
 		
 	}

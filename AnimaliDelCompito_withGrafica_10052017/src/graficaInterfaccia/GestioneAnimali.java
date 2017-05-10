@@ -12,7 +12,6 @@ import java.util.Scanner;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -61,7 +60,7 @@ public class GestioneAnimali extends JFrame
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void updateList()
+	protected void updateList()
 	{
 		this.animali.setListData(this.parco.toArrayString());
 	}
@@ -71,7 +70,8 @@ public class GestioneAnimali extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{		
-			new FormAnimali(parco);
+			new FormAnimali(GestioneAnimali.this);
+			GestioneAnimali.this.setVisible(false);
 		}
 		
 	}
