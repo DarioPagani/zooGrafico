@@ -2,12 +2,19 @@ package graficaInterfaccia;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Scanner;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import zoo.Zoo;
 
@@ -17,27 +24,57 @@ public class GestioneAnimali extends JFrame
 	
 	// Fields
 	private Zoo parco;
+	@SuppressWarnings("rawtypes")
+	private JList animali;
 	
 	
-	public GestioneAnimali(Zoo parco) throws HeadlessException 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public GestioneAnimali(Zoo parco_) throws HeadlessException 
 	{
 		super("Gestione Animali");
-		this.parco = parco;
+		this.parco = parco_;
 		
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		Container panello = super.getContentPane();
 		panello.setLayout(new BorderLayout());
 		
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		JList animali = new JList(parco.toArrayString());
+		this.animali = new JList(this.parco.toArrayString());
+		JScrollPane animaliScorro = new JScrollPane(this.animali);
+		animaliScorro.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		animaliScorro.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-		panello.add(animali, BorderLayout.CENTER);
+		panello.add(animaliScorro, BorderLayout.CENTER);
 		
+		JPanel controlli = new JPanel(new GridLayout(1, 2));
+		panello.add(controlli, BorderLayout.SOUTH);
+		
+		JButton invia = new JButton("Invia");
+		invia.addActionListener(new Aggiungi());
+		
+		JButton elimina = new JButton("Elimina");
+		
+		controlli.add(invia);
+		controlli.add(elimina);
 		super.setVisible(true);
 		super.pack();
 	}
 	
+	@SuppressWarnings("unchecked")
+	private void updateList()
+	{
+		this.animali.setListData(this.parco.toArrayString());
+	}
+	
+	private class Aggiungi implements ActionListener
+	{		
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{		
+			new FormAnimali(parco);
+		}
+		
+	}
 	
 	
 	// Main
@@ -48,10 +85,4 @@ public class GestioneAnimali extends JFrame
 		new GestioneAnimali(parco);
 
 	}
-
-
-
-
-
-
 }

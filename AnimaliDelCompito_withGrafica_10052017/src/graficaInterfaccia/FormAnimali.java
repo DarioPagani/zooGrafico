@@ -1,19 +1,18 @@
 package graficaInterfaccia;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import zoo.Zoo;
+
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
+
 import java.text.SimpleDateFormat;
 
 import javax.swing.JRadioButton;
@@ -24,7 +23,6 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JList;
-import javax.imageio.ImageIO;
 import javax.swing.ListSelectionModel;
 
 public class FormAnimali extends JFrame
@@ -53,44 +51,24 @@ public class FormAnimali extends JFrame
 	private JScrollPane scrollPane;
 	@SuppressWarnings("rawtypes")
 	private JList list;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args)
-	{
-		EventQueue.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				try
-				{
-					FormAnimali frame = new FormAnimali();
-					frame.setVisible(true);
-				} catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
+	// Roba seria
+	private Zoo parco;
 
 	/**
 	 * Create the frame.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public FormAnimali()
+	public FormAnimali(Zoo parco)
 	{
-		try {
-			Image icona = ImageIO.read(new File("Generic.png"));
-			icona = icona.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-			setIconImage(icona);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		setTitle("Inserimento Bestia");
+		super("Inserimento Bestia");
+		
+		//
+		this.parco = parco;
+		
+		// Costruzione della finestra
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -166,6 +144,7 @@ public class FormAnimali extends JFrame
 		btnCancella = new JButton("cancella");
 		panel_2.add(btnCancella);
 		
+		super.setVisible(true);
 	}
 	
 	private class Cambia implements ActionListener {
@@ -192,4 +171,13 @@ public class FormAnimali extends JFrame
 		}
 	}
 
+	private class Invia implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{			
+		}
+		
+	}
 }
