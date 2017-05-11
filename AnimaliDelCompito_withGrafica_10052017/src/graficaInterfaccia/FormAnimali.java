@@ -10,6 +10,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JRadioButton;
@@ -20,9 +23,10 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
-public class FormAnimali extends JFrame
+public class FormAnimali extends JFrame implements WindowListener
 {
 
 	/**
@@ -34,10 +38,10 @@ public class FormAnimali extends JFrame
 	private static final String VALOREALLATTAMENTO[] = {"1", "2", "3", "4", "5"};
 	
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField textName;
 	private JFormattedTextField textBorn;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTextField textSpecie;
+	private JFormattedTextField textStima;
 	private JRadioButton rdbtnPesce;
 	private JRadioButton rdbtnMammifero;
 	private JLabel lblProfondita;
@@ -47,7 +51,7 @@ public class FormAnimali extends JFrame
 	private JButton btnCancella;
 	private JScrollPane scrollPane;
 	@SuppressWarnings("rawtypes")
-	private JList list;
+	private JList listValore;
 	
 	// Roba seria
 	private GestioneAnimali superiore;
@@ -58,7 +62,8 @@ public class FormAnimali extends JFrame
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public FormAnimali(GestioneAnimali superiore)
 	{
-		super("Inserimento Bestia");
+		super("Inserimento di un Animale");
+		setType(Type.UTILITY);
 		
 		//
 		this.superiore = superiore;
@@ -95,9 +100,9 @@ public class FormAnimali extends JFrame
 		JLabel lblIdentificatore = new JLabel("Identificatore");
 		panel_1.add(lblIdentificatore);
 		
-		textField = new JTextField();
-		panel_1.add(textField);
-		textField.setColumns(10);
+		textName = new JTextField();
+		panel_1.add(textName);
+		textName.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Data di nascita");
 		panel_1.add(lblNewLabel);
@@ -109,16 +114,18 @@ public class FormAnimali extends JFrame
 		JLabel lblNewLabel_1 = new JLabel("Specie");
 		panel_1.add(lblNewLabel_1);
 		
-		textField_2 = new JTextField();
-		panel_1.add(textField_2);
-		textField_2.setColumns(10);
+		textSpecie = new JTextField();
+		panel_1.add(textSpecie);
+		textSpecie.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("Valore Stimato");
 		panel_1.add(lblNewLabel_2);
 		
-		textField_3 = new JTextField();
-		panel_1.add(textField_3);
-		textField_3.setColumns(10);
+		NumberFormat xy = NumberFormat.getNumberInstance();
+		xy.setMaximumFractionDigits(2);
+		textStima = new JFormattedTextField(xy);
+		panel_1.add(textStima);
+		textStima.setColumns(10);
 		
 		lblProfondita = new JLabel("Profondita");
 		panel_1.add(lblProfondita);
@@ -127,9 +134,10 @@ public class FormAnimali extends JFrame
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		panel_1.add(scrollPane);
 		
-		list = new JList(FormAnimali.VALOREPROFONDITA);
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		scrollPane.setViewportView(list);
+		listValore = new JList(FormAnimali.VALOREPROFONDITA);
+		listValore.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listValore.setSelectedIndex(0);
+		scrollPane.setViewportView(listValore);
 		
 		panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.SOUTH);
@@ -143,6 +151,7 @@ public class FormAnimali extends JFrame
 		btnCancella = new JButton("cancella");
 		panel_2.add(btnCancella);
 		
+		super.addWindowListener(this);
 		super.setVisible(true);
 	}
 	
@@ -160,33 +169,79 @@ public class FormAnimali extends JFrame
 			if(this.select.rdbtnMammifero.isSelected()) 
 			{
 				this.select.lblProfondita.setText("Mesi di allattamento");
-				this.select.list.setListData(FormAnimali.VALOREALLATTAMENTO);
+				this.select.listValore.setListData(FormAnimali.VALOREALLATTAMENTO);
 			}
 			else 
 			{
 				this.select.lblProfondita.setText("Profondita");
-				this.select.list.setListData(FormAnimali.VALOREPROFONDITA);
+				this.select.listValore.setListData(FormAnimali.VALOREPROFONDITA);
 			}
+			this.select.listValore.setSelectedIndex(0);
 		}
 	}
 
 	private class Invia implements ActionListener
 	{
-
+		private FormAnimali genitrice = FormAnimali.this;
+		
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			FormAnimali.this.superiore.updateList();
+			// Aggiungo le informazioni
+			String toAdd = new String();
+			
+			toAdd+=Boolean.toString(this.genitrice.rdbtnMammifero.isSelected())+';';
+			toAdd+=this.genitrice.textName.getText()+';';
+			toAdd+=this.genitrice.textBorn.getText()+';';
+			toAdd+=this.genitrice.textSpecie.getText()+';';
+			toAdd+=this.genitrice.textStima.getText()+';';
+			toAdd+=this.genitrice.listValore.getSelectedValue().toString()+';';
+			
+			System.out.println(toAdd);
+			
 			try
 			{
-				FormAnimali.this.dispose();
-				FormAnimali.this.superiore.setVisible(true);
+				FormAnimali.this.superiore.aggiungiAnimale(toAdd);
 			}
-			catch (Throwable e1)
+			catch (Exception e2)
 			{
-				System.err.println("Sembra sia impossibile chiudere la finestra...");
+				JOptionPane.showMessageDialog(FormAnimali.this, "Qualcosa è andato storto:\n"+e2.toString(), "Errore di parafrasi", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
+			this.genitrice.windowClosing(null);
 		}
-		
 	}
+
+	@Override
+	public void windowActivated(WindowEvent e){;}
+
+	@Override
+	public void windowClosed(WindowEvent e){;}
+
+	@Override
+	public void windowClosing(WindowEvent e)
+	{
+		FormAnimali.this.superiore.updateList();
+		try
+		{
+			this.dispose();
+			this.superiore.setVisible(true);
+		}
+		catch (Throwable e1)
+		{
+			System.err.println("Sembra sia impossibile chiudere la finestra...");
+		}
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e){;}
+
+	@Override
+	public void windowDeiconified(WindowEvent e){;}
+
+	@Override
+	public void windowIconified(WindowEvent e){;}
+
+	@Override
+	public void windowOpened(WindowEvent e){;}
 }

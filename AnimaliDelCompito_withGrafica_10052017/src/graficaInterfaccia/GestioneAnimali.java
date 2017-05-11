@@ -48,7 +48,7 @@ public class GestioneAnimali extends JFrame
 		JPanel controlli = new JPanel(new GridLayout(1, 2));
 		panello.add(controlli, BorderLayout.SOUTH);
 		
-		JButton invia = new JButton("Invia");
+		JButton invia = new JButton("Aggiungi");
 		invia.addActionListener(new Aggiungi());
 		
 		JButton elimina = new JButton("Elimina");
@@ -58,7 +58,13 @@ public class GestioneAnimali extends JFrame
 		super.setVisible(true);
 		super.pack();
 	}
+	// Funzioni
+	protected void aggiungiAnimale(String toAdd) throws Exception
+	{
+		this.parco.aggiungiAnimale(toAdd);
+	}
 	
+	// Gestione degli eventi
 	@SuppressWarnings("unchecked")
 	protected void updateList()
 	{
