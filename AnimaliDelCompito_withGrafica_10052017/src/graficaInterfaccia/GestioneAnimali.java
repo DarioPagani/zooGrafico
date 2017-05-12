@@ -2,6 +2,7 @@ package graficaInterfaccia;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -57,6 +58,7 @@ public class GestioneAnimali extends JFrame
 		controlli.add(elimina);
 		super.setVisible(true);
 		super.pack();
+		super.setMinimumSize(new Dimension(400, 200));
 	}
 	// Funzioni
 	protected void aggiungiAnimale(String toAdd) throws Exception

@@ -63,7 +63,7 @@ public class FormAnimali extends JFrame implements WindowListener
 	public FormAnimali(GestioneAnimali superiore)
 	{
 		super("Inserimento di un Animale");
-		setType(Type.UTILITY);
+		//setType(Type.UTILITY);
 		
 		//
 		this.superiore = superiore;
