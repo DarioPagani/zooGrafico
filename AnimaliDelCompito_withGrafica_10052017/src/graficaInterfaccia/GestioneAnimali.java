@@ -56,6 +56,20 @@ public class GestioneAnimali extends JFrame
 		
 		controlli.add(invia);
 		controlli.add(elimina);
+		
+		JPanel menu = new JPanel(new GridLayout(1, 3));
+		panello.add(menu, BorderLayout.NORTH);
+		
+		JButton salva = new JButton("Salva");
+		menu.add(salva);
+		
+		JButton carica = new JButton("Carica");
+		menu.add(carica);
+		
+		JButton svuota = new JButton("Più caro");
+		
+		menu.add(svuota);
+		
 		super.setVisible(true);
 		super.pack();
 		super.setMinimumSize(new Dimension(400, 200));
@@ -81,7 +95,6 @@ public class GestioneAnimali extends JFrame
 			new FormAnimali(GestioneAnimali.this);
 			GestioneAnimali.this.setVisible(false);
 		}
-		
 	}
 	
 	
@@ -89,7 +102,7 @@ public class GestioneAnimali extends JFrame
 	public static void main(String[] args) throws Exception 
 	{
 		Zoo parco = new Zoo(40);
-		parco.parse(new Scanner(new File("files/sampleInput")));
+		//parco.parse(new Scanner(new File("files/sampleInput")));
 		new GestioneAnimali(parco);
 
 	}

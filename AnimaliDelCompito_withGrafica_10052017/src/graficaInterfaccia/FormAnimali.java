@@ -149,6 +149,13 @@ public class FormAnimali extends JFrame implements WindowListener
 		invia.addActionListener(new Invia());
 		
 		btnCancella = new JButton("cancella");
+		this.btnCancella.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				FormAnimali.this.windowClosing(null);
+			}
+		});
 		panel_2.add(btnCancella);
 		
 		super.addWindowListener(this);
@@ -211,7 +218,8 @@ public class FormAnimali extends JFrame implements WindowListener
 			this.genitrice.windowClosing(null);
 		}
 	}
-
+	
+	// Eventi della finestra
 	@Override
 	public void windowActivated(WindowEvent e){;}
 
