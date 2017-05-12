@@ -34,8 +34,8 @@ public class FormAnimali extends JFrame implements WindowListener
 	 */
 	private static final long serialVersionUID = 4327599785454763120L;
 	
-	private static final String VALOREPROFONDITA [] = {"100", "200", "300", "400", "500"};
-	private static final String VALOREALLATTAMENTO[] = {"1", "2", "3", "4", "5"};
+	private static final String VALOREPROFONDITA [] = {"50", "100", "150", "200", "300", "400", "500"};
+	private static final String VALOREALLATTAMENTO[] = {"2", "4", "6", "8", "10", "12", "14", "16"};
 	
 	private JPanel contentPane;
 	private JTextField textName;
@@ -160,6 +160,8 @@ public class FormAnimali extends JFrame implements WindowListener
 		
 		super.addWindowListener(this);
 		super.setVisible(true);
+		super.setLocationRelativeTo(this.superiore);
+
 	}
 	
 	private class Cambia implements ActionListener {
@@ -197,7 +199,8 @@ public class FormAnimali extends JFrame implements WindowListener
 			// Aggiungo le informazioni
 			String toAdd = new String();
 			
-			toAdd+=Boolean.toString(this.genitrice.rdbtnMammifero.isSelected())+';';
+			toAdd+=Boolean.toString(this.genitrice.rdbtnPesce.isSelected())+';';
+			System.out.println(toAdd);
 			toAdd+=this.genitrice.textName.getText()+';';
 			toAdd+=this.genitrice.textBorn.getText()+';';
 			toAdd+=this.genitrice.textSpecie.getText()+';';
@@ -233,7 +236,7 @@ public class FormAnimali extends JFrame implements WindowListener
 		try
 		{
 			this.dispose();
-			this.superiore.setVisible(true);
+			this.superiore.setEnabled(true);
 		}
 		catch (Throwable e1)
 		{
