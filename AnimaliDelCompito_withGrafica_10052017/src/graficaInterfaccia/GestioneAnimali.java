@@ -18,6 +18,8 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 
 import zoo.Zoo;
 
@@ -43,6 +45,8 @@ public class GestioneAnimali extends JFrame
 		panello.setLayout(new BorderLayout());
 		
 		this.animali = new JList(this.parco.toArrayString());
+		this.animali.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		JScrollPane animaliScorro = new JScrollPane(this.animali);
 		animaliScorro.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		animaliScorro.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -76,9 +80,12 @@ public class GestioneAnimali extends JFrame
 				String file = null;
 				File out = null;
 				
-				file = JOptionPane.showInputDialog(GestioneAnimali.this, "Inserire percoso del documento da salvare\nEsempio: files/sampleOutput");
-				if(file == null || file.equals(""))
+				file = JOptionPane.showInputDialog(GestioneAnimali.this, "Inserire percoso del documento da salvare\nEsempio: files/sampleOutput", "Salva");
+				if(file == null )
 					return;
+				
+				if(file.equals(""))
+					file = new String("files/sampleOutput");
 				
 				out = new File(file);
 				try
@@ -106,7 +113,10 @@ public class GestioneAnimali extends JFrame
 				boolean esiste = false;
 				
 				file = JOptionPane.showInputDialog(GestioneAnimali.this, "Inserire percoso del documento da caricare\nDefualt: files/sampleInput");
-				if(file == null || file.equals(""))
+				if(file == null)
+					return;
+					
+				if(file.equals(""))
 					file = new String("files/sampleInput");
 				
 				while(!esiste)
@@ -174,7 +184,30 @@ public class GestioneAnimali extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			JOptionPane.showMessageDialog(GestioneAnimali.this, "Non sono ancora programmato per questo...", "Muble", JOptionPane.WARNING_MESSAGE);
+			//JOptionPane.showMessageDialog(GestioneAnimali.this, "Non sono ancora programmato per questo...", "Muble", JOptionPane.WARNING_MESSAGE);
+			// Variabili
+			String selezione = (String) GestioneAnimali.this.animali.getSelectedValue();
+			String targa = new String();
+			int i;
+			
+			if(selezione == null)
+			{
+				JOptionPane.showMessageDialog(GestioneAnimali.this, "Non è stato selezionato nulla!","Attenzione", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+			
+			for(i=0; selezione.charAt(i) != ';'; i++)
+				;
+			
+			for(i++; selezione.charAt(i) != ';'; i++)
+				targa = targa.concat(Character.toString(selezione.charAt(i)));
+				
+			if(JOptionPane.showConfirmDialog(GestioneAnimali.this, "Eliminare veramente \""+targa+"\"?", "Conferma", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
+				return;
+			
+			GestioneAnimali.this.parco.cancella(targa);
+			
+			GestioneAnimali.this.updateList();
 		}
 	}
 	
@@ -184,6 +217,17 @@ public class GestioneAnimali extends JFrame
 	{
 		Zoo parco = new Zoo(40);
 		//parco.parse(new Scanner(new File("files/sampleInput")));
+		
+		// Tento il tema bellino
+		try
+		{
+			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, "Non è stato possibile abilitare il tema più bello\n"+e.toString(), "Errore", JOptionPane.ERROR_MESSAGE);
+		}
+		
 		new GestioneAnimali(parco);
 
 	}
