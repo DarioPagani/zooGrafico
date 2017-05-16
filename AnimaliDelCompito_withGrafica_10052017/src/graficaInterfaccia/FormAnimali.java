@@ -122,7 +122,9 @@ public class FormAnimali extends JFrame implements WindowListener
 		panel_1.add(lblNewLabel_2);
 		
 		NumberFormat xy = NumberFormat.getNumberInstance();
-		xy.setMaximumFractionDigits(2);
+		xy.setMaximumFractionDigits(0);
+		xy.setGroupingUsed(Boolean.FALSE);
+		xy.setParseIntegerOnly(Boolean.TRUE);
 		textStima = new JFormattedTextField(xy);
 		panel_1.add(textStima);
 		textStima.setColumns(10);
